@@ -225,7 +225,7 @@ private fun CameraContent(navController: NavController) {
                                 fontSize = 12.sp
                             )
                             Text(
-                                text = "${result.formScorePercentage}%",
+                                text = "${(result.formScore * 100).toInt()}%",
                                 color = when (result.formStatus) {
                                     FormStatus.GOOD -> FormCorrect
                                     FormStatus.WARNING -> FormWarning

@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,17 +104,17 @@ fun ProgressScreen(navController: NavController) {
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    StatItem(
+                    ProgressStatItem(
                         value = "12",
                         label = "Treninga",
                         color = GymGreen
                     )
-                    StatItem(
+                    ProgressStatItem(
                         value = "87%",
                         label = "Avg forma",
                         color = GymGreen
                     )
-                    StatItem(
+                    ProgressStatItem(
                         value = "3840",
                         label = "Kalorija",
                         color = AccentOrange
@@ -190,7 +191,7 @@ fun ProgressScreen(navController: NavController) {
                 Triple("Sklekovi", 0.88f, GymGreen),
                 Triple("Pull-up", 0.71f, AccentOrange)
             ).forEach { (name, score, color) ->
-                FormScoreRow(
+                ProgressFormScoreRow(
                     exerciseName = name,
                     score = score,
                     color = color
@@ -236,10 +237,31 @@ private fun WeeklyBarItem(
 }
 
 @Composable
-private fun FormScoreRow(
+private fun ProgressStatItem(
+    value: String,
+    label: String,
+    color: Color
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = value,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = color
+        )
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = TextSecondary
+        )
+    }
+}
+
+@Composable
+private fun ProgressFormScoreRow(
     exerciseName: String,
     score: Float,
-    color: androidx.compose.ui.graphics.Color
+    color: Color
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),

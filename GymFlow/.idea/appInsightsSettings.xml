@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.gymflow.app" />
+                  <option name="mobileSdkAppId" value="1:15106558205:android:5ac0fc08201c6d570a9694" />
+                  <option name="projectId" value="gymflow-261a8" />
+                  <option name="projectNumber" value="15106558205" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
