@@ -1,0 +1,10 @@
+<resources>
+    <color name="guardian_background">#060A10</color>
+    <color name="guardian_panel">#111B2A</color>
+    <color name="guardian_text">#F7FAFF</color>
+    <color name="guardian_muted">#A8B7CC</color>
+    <color name="guardian_border">#324154</color>
+    <color name="guardian_action">#205375</color>
+    <color name="guardian_danger">#D62839</color>
+    <color name="guardian_danger_light">#FF6B6B</color>
+</resources>

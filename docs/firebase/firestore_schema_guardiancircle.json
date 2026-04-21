@@ -1,0 +1,182 @@
+{
+  "project": "GuardianCircle",
+  "database_model": {
+    "users": {
+      "{uid}": {
+        "uid": "firebase-auth-uid",
+        "display_name": "Ana Horvat",
+        "device_type": "wear_os",
+        "updated_at_epoch_ms": 1775217600000,
+        "family_access": {
+          "guardian_ids": [
+            "guardian-daughter-01",
+            "guardian-son-02"
+          ],
+          "care_circle_name": "GuardianCircle Primary Family"
+        },
+        "user_profile": {
+          "main": {
+            "full_name": "Ana Horvat",
+            "blood_type": "A+",
+            "date_of_birth": "1948-09-11",
+            "gender": "female",
+            "height_cm": 162,
+            "weight_kg": 64,
+            "allergies": [
+              {
+                "name": "Penicillin",
+                "severity": "high",
+                "notes": "Avoid all penicillin-based antibiotics"
+              },
+              {
+                "name": "Peanuts",
+                "severity": "medium",
+                "notes": "Carry antihistamine"
+              }
+            ],
+            "medical_history": [
+              {
+                "condition": "Hypertension",
+                "diagnosed_year": 2017,
+                "status": "active"
+              },
+              {
+                "condition": "Atrial fibrillation",
+                "diagnosed_year": 2023,
+                "status": "monitoring"
+              }
+            ],
+            "current_medications": [
+              {
+                "name": "Amlodipine",
+                "dosage": "5 mg",
+                "schedule": "08:00",
+                "notes": "After breakfast"
+              },
+              {
+                "name": "Warfarin",
+                "dosage": "3 mg",
+                "schedule": "20:00",
+                "notes": "Check INR weekly"
+              }
+            ],
+            "primary_contact": {
+              "name": "Marko Horvat",
+              "relationship": "son",
+              "phone": "+38591111222",
+              "email": "marko@example.com"
+            },
+            "guardians": [
+              {
+                "guardian_id": "guardian-daughter-01",
+                "name": "Ivana Horvat",
+                "relationship": "daughter",
+                "phone": "+38595555444",
+                "can_read_medical_history": true,
+                "can_acknowledge_alerts": true
+              },
+              {
+                "guardian_id": "guardian-son-02",
+                "name": "Marko Horvat",
+                "relationship": "son",
+                "phone": "+38591111222",
+                "can_read_medical_history": true,
+                "can_acknowledge_alerts": true
+              }
+            ]
+          }
+        },
+        "live_stats": {
+          "current": {
+            "gps": {
+              "latitude": 45.81501,
+              "longitude": 15.98192,
+              "accuracy_m": 9.5,
+              "provider": "gps"
+            },
+            "heart_rate_bpm": 74,
+            "blood_pressure": {
+              "systolic": 129,
+              "diastolic": 81,
+              "unit": "mmHg"
+            },
+            "steps_today": 4251,
+            "battery_percent": 83,
+            "device_model": "Galaxy Watch",
+            "updated_at_epoch_ms": 1775217600000,
+            "emergency_state": {
+              "active": false,
+              "last_emergency_id": null,
+              "last_trigger_type": null
+            }
+          }
+        },
+        "emergency_logs": {
+          "{eventId}": {
+            "event_id": "event-1775217600000",
+            "trigger_type": "fall_detected",
+            "trigger_source": "accelerometer",
+            "peak_g_force": 3.42,
+            "countdown_ms": 30000,
+            "created_at_epoch_ms": 1775217600000,
+            "call_attempted": false,
+            "device_model": "Galaxy Watch",
+            "location": {
+              "latitude": 45.81501,
+              "longitude": 15.98192,
+              "accuracy_m": 9.5,
+              "provider": "gps"
+            },
+            "dispatch": {
+              "requires_push_fan_out": true,
+              "state": "queued",
+              "channel": "firebase_firestore_trigger"
+            }
+          }
+        },
+        "devices": {
+          "watch": {
+            "platform": "wearos",
+            "device_model": "Galaxy Watch",
+            "fcm_token": "wear-device-token",
+            "updated_at_epoch_ms": 1775217600000
+          },
+          "{guardianDeviceId}": {
+            "platform": "android",
+            "owner_guardian_id": "guardian-daughter-01",
+            "fcm_token": "guardian-device-token",
+            "updated_at_epoch_ms": 1775217600000
+          }
+        },
+        "health_history": {
+          "{timeslotId}": {
+            "captured_at_epoch_ms": 1775217600000,
+            "heart_rate_bpm": 74,
+            "steps_today": 4251,
+            "blood_pressure_systolic": 129,
+            "blood_pressure_diastolic": 81,
+            "gps_latitude": 45.81501,
+            "gps_longitude": 15.98192
+          }
+        }
+      }
+    }
+  },
+  "realtime_access_pattern": {
+    "watch_writes": [
+      "users/{uid}/live_stats/current",
+      "users/{uid}/emergency_logs/{eventId}",
+      "users/{uid}/devices/watch"
+    ],
+    "family_reads": [
+      "users/{uid}/user_profile/main",
+      "users/{uid}/live_stats/current",
+      "users/{uid}/emergency_logs"
+    ],
+    "cloud_function_trigger": {
+      "path": "users/{uid}/emergency_logs/{eventId}",
+      "condition": "dispatch.requires_push_fan_out == true && dispatch.state == 'queued'",
+      "result": "Send FCM push to every guardian token and then mark dispatch.state='sent'"
+    }
+  }
+}

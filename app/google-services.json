@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "197888596995",
+    "project_id": "guardiancircle-1e2e5",
+    "storage_bucket": "guardiancircle-1e2e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197888596995:android:c7fd5757442a8de5e30236",
+        "android_client_info": {
+          "package_name": "com.guardian.circle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqg-ejuajcUxWJef_FJ4K2M1IAkE1xroc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197888596995:android:f849eec2d984b519e30236",
+        "android_client_info": {
+          "package_name": "com.guardian.circle.ui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqg-ejuajcUxWJef_FJ4K2M1IAkE1xroc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
