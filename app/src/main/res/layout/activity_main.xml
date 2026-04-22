@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/guardian_background">
+    android:background="@drawable/bg_watch_surface">
 
     <ScrollView
         android:id="@+id/mainScrollView"
@@ -16,140 +16,156 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="28dp">
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textColor="@color/guardian_text"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/statusPanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_status_panel"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:paddingStart="@dimen/watch_content_horizontal_padding"
+            android:paddingTop="@dimen/watch_content_top_padding"
+            android:paddingEnd="@dimen/watch_content_horizontal_padding"
+            android:paddingBottom="@dimen/watch_content_bottom_padding">
 
             <TextView
-                android:id="@+id/statusTitleTextView"
-                android:layout_width="match_parent"
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sos_status_idle"
+                android:text="@string/app_name"
                 android:textColor="@color/guardian_text"
-                android:textSize="14sp"
+                android:textSize="@dimen/watch_title_size"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/statusDetailTextView"
+            <LinearLayout
+                android:id="@+id/statusPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/sos_status_monitoring_detail"
-                android:textColor="@color/guardian_muted"
+                android:layout_marginTop="@dimen/watch_section_spacing_small"
+                android:background="@drawable/bg_status_panel"
+                android:orientation="vertical"
+                android:padding="@dimen/watch_panel_padding">
+
+                <TextView
+                    android:id="@+id/statusTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sos_status_idle"
+                    android:textColor="@color/guardian_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statusDetailTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/sos_status_monitoring_detail"
+                    android:textColor="@color/guardian_muted"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/savedPhoneNumbersLabelTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/watch_section_spacing_small"
+                android:text="@string/saved_phone_numbers_label"
+                android:textColor="@color/guardian_text"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/savedPhoneNumbersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/savedPhoneNumbersEmptyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_status_panel"
+                android:padding="@dimen/watch_panel_padding"
+                android:text="@string/saved_phone_numbers_empty"
+                android:textColor="@color/guardian_text"
                 android:textSize="12sp" />
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/savedPhoneNumbersLabelTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/saved_phone_numbers_label"
-            android:textColor="@color/guardian_text"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/savedPhoneNumbersHintTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/saved_phone_numbers_hint"
+                android:textColor="@color/guardian_muted"
+                android:textSize="11sp"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/savedPhoneNumbersTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_status_panel"
-            android:padding="10dp"
-            android:text="@string/saved_phone_numbers_empty"
-            android:textColor="@color/guardian_text"
-            android:textSize="12sp" />
+            <EditText
+                android:id="@+id/phoneNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/watch_section_spacing_small"
+                android:background="@drawable/bg_input_field"
+                android:digits="+0123456789 "
+                android:hint="@string/phone_input_hint"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="18"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/guardian_text"
+                android:textColorHint="@color/guardian_muted" />
 
-        <EditText
-            android:id="@+id/phoneNumberEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_input_field"
-            android:digits="+0123456789 "
-            android:hint="@string/phone_input_hint"
-            android:importantForAutofill="no"
-            android:inputType="phone"
-            android:maxLength="18"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/guardian_text"
-            android:textColorHint="@color/guardian_muted" />
+            <Button
+                android:id="@+id/addPhoneButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_action_button"
+                android:minHeight="0dp"
+                android:padding="10dp"
+                android:text="@string/add_phone_button_label"
+                android:textAllCaps="false"
+                android:textColor="@color/guardian_text"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/addPhoneButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_action_button"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/add_phone_button_label"
-            android:textAllCaps="false"
-            android:textColor="@color/guardian_text"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/sosButton"
+                android:layout_width="@dimen/watch_sos_button_size"
+                android:layout_height="@dimen/watch_sos_button_size"
+                android:layout_marginTop="@dimen/watch_section_spacing_medium"
+                android:background="@drawable/bg_sos_button"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:text="@string/sos_button_label"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/sosButton"
-            android:layout_width="148dp"
-            android:layout_height="148dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_sos_button"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="0dp"
-            android:text="@string/sos_button_label"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/stopSosButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_stop_button"
+                android:minHeight="0dp"
+                android:padding="10dp"
+                android:text="@string/stop_sos_button_label"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
-        <Button
-            android:id="@+id/stopSosButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_stop_button"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/stop_sos_button_label"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/footerTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="@string/footer_hint"
-            android:textColor="@color/guardian_muted"
-            android:textSize="11sp" />
+            <TextView
+                android:id="@+id/footerTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/watch_section_spacing_small"
+                android:gravity="center"
+                android:text="@string/footer_hint"
+                android:textColor="@color/guardian_muted"
+                android:textSize="11sp" />
         </LinearLayout>
     </ScrollView>
 </androidx.wear.widget.BoxInsetLayout>

@@ -75,6 +75,21 @@ public final class EmergencyContactStore {
         return SaveResult.SAVED;
     }
 
+    public static boolean removePhoneNumber(Context context, String rawPhoneNumber) {
+        String normalizedPhoneNumber = normalizePhoneNumber(rawPhoneNumber);
+        if (TextUtils.isEmpty(normalizedPhoneNumber)) {
+            return false;
+        }
+
+        List<String> savedPhoneNumbers = getSavedPhoneNumbers(context);
+        if (!savedPhoneNumbers.remove(normalizedPhoneNumber)) {
+            return false;
+        }
+
+        persistPhoneNumbers(context, savedPhoneNumbers);
+        return true;
+    }
+
     public static boolean isValidCroatianPhoneNumber(String rawPhoneNumber) {
         return CROATIAN_PHONE_PATTERN.matcher(normalizePhoneNumber(rawPhoneNumber)).matches();
     }

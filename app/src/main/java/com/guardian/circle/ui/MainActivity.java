@@ -1,6 +1,7 @@
 package com.guardian.circle.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,12 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +37,10 @@ public class MainActivity extends Activity {
 
     private TextView statusTitleTextView;
     private TextView statusDetailTextView;
-    private TextView savedPhoneNumbersTextView;
+    private TextView savedPhoneNumbersEmptyTextView;
+    private TextView savedPhoneNumbersHintTextView;
     private EditText phoneNumberEditText;
+    private LinearLayout savedPhoneNumbersContainer;
     private ScrollView mainScrollView;
     private Button addPhoneButton;
     private Button sosButton;
@@ -85,7 +91,9 @@ public class MainActivity extends Activity {
 
         statusTitleTextView = findViewById(R.id.statusTitleTextView);
         statusDetailTextView = findViewById(R.id.statusDetailTextView);
-        savedPhoneNumbersTextView = findViewById(R.id.savedPhoneNumbersTextView);
+        savedPhoneNumbersContainer = findViewById(R.id.savedPhoneNumbersContainer);
+        savedPhoneNumbersEmptyTextView = findViewById(R.id.savedPhoneNumbersEmptyTextView);
+        savedPhoneNumbersHintTextView = findViewById(R.id.savedPhoneNumbersHintTextView);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
         mainScrollView = findViewById(R.id.mainScrollView);
         addPhoneButton = findViewById(R.id.addPhoneButton);
@@ -211,19 +219,35 @@ public class MainActivity extends Activity {
 
     private void renderSavedPhoneNumbers() {
         List<String> savedPhoneNumbers = EmergencyContactStore.getSavedPhoneNumbers(this);
+        savedPhoneNumbersContainer.removeAllViews();
+
         if (savedPhoneNumbers.isEmpty()) {
-            savedPhoneNumbersTextView.setText(R.string.saved_phone_numbers_empty);
+            savedPhoneNumbersEmptyTextView.setVisibility(View.VISIBLE);
+            savedPhoneNumbersHintTextView.setVisibility(View.GONE);
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
-        for (String savedPhoneNumber : savedPhoneNumbers) {
-            if (builder.length() > 0) {
-                builder.append('\n');
+        boolean editingEnabled = !SosSessionManager.isActive();
+        savedPhoneNumbersEmptyTextView.setVisibility(View.GONE);
+        savedPhoneNumbersHintTextView.setVisibility(View.VISIBLE);
+        savedPhoneNumbersHintTextView.setText(
+                editingEnabled ? R.string.saved_phone_numbers_hint : R.string.saved_phone_numbers_locked_hint
+        );
+
+        for (int index = 0; index < savedPhoneNumbers.size(); index++) {
+            String savedPhoneNumber = savedPhoneNumbers.get(index);
+            TextView phoneNumberView = createPhoneNumberItem(savedPhoneNumber, editingEnabled);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            if (index > 0) {
+                layoutParams.topMargin = getResources().getDimensionPixelSize(R.dimen.watch_saved_number_spacing);
             }
-            builder.append(savedPhoneNumber);
+            phoneNumberView.setLayoutParams(layoutParams);
+            savedPhoneNumbersContainer.addView(phoneNumberView);
         }
-        savedPhoneNumbersTextView.setText(builder.toString());
     }
 
     private void renderActiveSosStatusIfNeeded() {
@@ -273,9 +297,55 @@ public class MainActivity extends Activity {
         phoneNumberEditText.setAlpha(sosActive ? 0.6f : 1.0f);
         addPhoneButton.setAlpha(sosActive ? 0.6f : 1.0f);
         sosButton.setAlpha(sosActive ? 0.6f : 1.0f);
+        renderSavedPhoneNumbers();
 
         if (shouldRevealStopButton && mainScrollView != null) {
             mainScrollView.post(() -> mainScrollView.smoothScrollTo(0, stopSosButton.getBottom()));
         }
+    }
+
+    private TextView createPhoneNumberItem(String phoneNumber, boolean enabled) {
+        TextView phoneNumberView = new TextView(this);
+        int horizontalPadding = getResources().getDimensionPixelSize(R.dimen.watch_saved_number_padding_horizontal);
+        int verticalPadding = getResources().getDimensionPixelSize(R.dimen.watch_saved_number_padding_vertical);
+
+        phoneNumberView.setBackgroundResource(R.drawable.bg_phone_number_item);
+        phoneNumberView.setGravity(Gravity.CENTER);
+        phoneNumberView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding);
+        phoneNumberView.setText(phoneNumber);
+        phoneNumberView.setTextColor(ContextCompat.getColor(this, R.color.guardian_text));
+        phoneNumberView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f);
+        phoneNumberView.setClickable(enabled);
+        phoneNumberView.setFocusable(enabled);
+        phoneNumberView.setEnabled(enabled);
+        phoneNumberView.setAlpha(enabled ? 1.0f : 0.6f);
+
+        phoneNumberView.setOnClickListener(view -> {
+            if (!view.isEnabled()) {
+                return;
+            }
+            showRemovePhoneNumberDialog(phoneNumber);
+        });
+        return phoneNumberView;
+    }
+
+    private void showRemovePhoneNumberDialog(String phoneNumber) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.remove_phone_dialog_title)
+                .setMessage(getString(R.string.remove_phone_dialog_message, phoneNumber))
+                .setPositiveButton(R.string.remove_phone_confirm, (dialogInterface, i) -> removePhoneNumber(phoneNumber))
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void removePhoneNumber(String phoneNumber) {
+        if (!EmergencyContactStore.removePhoneNumber(this, phoneNumber)) {
+            return;
+        }
+
+        renderSavedPhoneNumbers();
+        statusTitleTextView.setText(R.string.phone_removed_title);
+        statusDetailTextView.setText(R.string.phone_removed_detail);
+        Toast.makeText(this, R.string.phone_removed_toast, Toast.LENGTH_SHORT).show();
     }
 }

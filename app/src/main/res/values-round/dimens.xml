@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="watch_content_horizontal_padding">26dp</dimen>
+    <dimen name="watch_content_top_padding">22dp</dimen>
+    <dimen name="watch_content_bottom_padding">34dp</dimen>
+    <dimen name="watch_section_spacing_small">14dp</dimen>
+    <dimen name="watch_section_spacing_medium">18dp</dimen>
+    <dimen name="watch_panel_padding">14dp</dimen>
+    <dimen name="watch_panel_radius">24dp</dimen>
+    <dimen name="watch_input_radius">18dp</dimen>
+    <dimen name="watch_button_radius">22dp</dimen>
+    <dimen name="watch_saved_number_radius">20dp</dimen>
+    <dimen name="watch_saved_number_spacing">10dp</dimen>
+    <dimen name="watch_saved_number_padding_horizontal">16dp</dimen>
+    <dimen name="watch_saved_number_padding_vertical">12dp</dimen>
+    <dimen name="watch_sos_button_size">128dp</dimen>
+    <dimen name="watch_title_size">19sp</dimen>
+</resources>
