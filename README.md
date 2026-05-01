@@ -97,6 +97,7 @@ Primjer build naredbe:
 - Hrvatski vodic za Firebase postavljanje nalazi se u [docs/firebase/firebase_setup_hr.md](docs/firebase/firebase_setup_hr.md).
 - Predlozena Firestore shema nalazi se u [docs/firebase/firestore_schema_guardiancircle.json](docs/firebase/firestore_schema_guardiancircle.json).
 - Aplikacija je pripremljena tako da Google Services plugin bude aktiviran samo kada datoteka `app/google-services.json` postoji.
+- Datoteku `app/google-services.json` treba drzati samo lokalno i ne commitati je u repozitorij.
 - U slucaju da Firebase nije konfiguriran, aplikacija ostaje funkcionalna za lokalni SOS tijek, ali bez cloud sinkronizacije.
 
 ### Sigurnosne i operativne napomene
@@ -105,6 +106,7 @@ Primjer build naredbe:
 - Repozitorij trenutno ne sadrzi automatizirane testove.
 - Mapa `GuardianCircle/` predstavlja zaseban eksperimentalni ili referentni projekt temeljen na Wear Compose predlosku i nije ukljucena u aktivni korijenski build.
 - Konfiguracijske datoteke poput `google-services.json` trebaju odgovarati stvarnom Firebase projektu okruzenja u kojem se aplikacija pokrece.
+- Google API key iz `google-services.json` treba ograniciti na Android aplikaciju i odgovarajuci signing certifikat u Google Cloud Console.
 
 ### Status repozitorija
 
@@ -213,6 +215,7 @@ Example build command:
 - The Croatian Firebase setup guide is available at [docs/firebase/firebase_setup_hr.md](docs/firebase/firebase_setup_hr.md).
 - The proposed Firestore schema is available at [docs/firebase/firestore_schema_guardiancircle.json](docs/firebase/firestore_schema_guardiancircle.json).
 - The application is configured so that the Google Services plugin is only applied when `app/google-services.json` exists.
+- Keep `app/google-services.json` local-only and do not commit it to the repository.
 - If Firebase is not configured, the local SOS flow remains available, but cloud synchronization is disabled.
 
 ### Security and Operational Notes
@@ -221,6 +224,7 @@ Example build command:
 - The repository currently does not include automated tests.
 - The `GuardianCircle/` directory is a standalone experimental or reference project based on a Wear Compose starter template and is not part of the active root build.
 - Configuration files such as `google-services.json` should match the actual Firebase environment used for deployment.
+- Restrict any Google API key generated for Firebase to the Android app package and signing certificate in Google Cloud Console.
 
 ### Repository Status
 

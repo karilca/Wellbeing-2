@@ -13,9 +13,15 @@ Ovo je najkraci produkcijski put da Wear OS sat salje podatke clanovima obitelji
 1. U Firebase projektu klikni `Add app` -> `Android`.
 2. Kao package name koristi `com.guardian.circle.ui`.
 3. Preuzmi `google-services.json`.
-4. Spremi ga tocno u `app/google-services.json`.
+4. Spremi ga tocno u `app/google-services.json`, ali zadrzi ga samo lokalno i nemoj ga commitati u git.
 
 Napomena: `app/build.gradle` je vec pripremljen tako da se Google Services plugin aktivira tek kad datoteka postoji.
+
+## Sigurnosna napomena za `google-services.json`
+
+- Firebase Android `google-services.json` nije mjesto za server-side tajne, ali ga svejedno ne treba drzati u javnom repozitoriju.
+- Google API key iz tog fajla treba ograniciti u Google Cloud Console na Android aplikaciju `com.guardian.circle.ui` i odgovarajuci SHA-1 ili SHA-256 potpis certifikata.
+- Ako je kljuc vec bio objavljen, preporuka je regenerirati ili zamijeniti ga nakon sto postavis restrictione.
 
 ## 3. Sinkroniziraj projekt u Android Studiju
 

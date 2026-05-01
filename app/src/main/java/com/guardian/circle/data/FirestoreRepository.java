@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -25,8 +26,6 @@ import com.guardian.circle.utils.PermissionHelper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 public class FirestoreRepository {
 
     public static final String PREFS_NAME = "guardian_circle_prefs";
@@ -39,7 +38,6 @@ public class FirestoreRepository {
     private static final String PREF_LAST_LAT = "last_latitude";
     private static final String PREF_LAST_LON = "last_longitude";
     private static final String PREF_LAST_ACC = "last_accuracy";
-    private static final String PREF_FALLBACK_UID = "fallback_uid";
     private static final String TAG = "FirestoreRepository";
 
     private final Context appContext;
@@ -76,6 +74,10 @@ public class FirestoreRepository {
 
     public boolean isFirebaseReady() {
         return firebaseReady;
+    }
+
+    public void primeAnonymousAuth() {
+        ensureAuthenticated(false);
     }
 
     public boolean updateLiveStats(LiveStats liveStats) {
@@ -237,12 +239,14 @@ public class FirestoreRepository {
             return currentUser.getUid();
         }
 
-        String fallbackUid = preferences.getString(PREF_FALLBACK_UID, "");
-        if (TextUtils.isEmpty(fallbackUid)) {
-            fallbackUid = "demo-" + UUID.randomUUID();
-            preferences.edit().putString(PREF_FALLBACK_UID, fallbackUid).apply();
+        if (ensureAuthenticated(!isMainThread())) {
+            currentUser = auth != null ? auth.getCurrentUser() : null;
+            if (currentUser != null) {
+                return currentUser.getUid();
+            }
         }
-        return fallbackUid;
+
+        return "";
     }
 
     private Map<String, Object> buildUserShell(String uid) {
@@ -264,5 +268,35 @@ public class FirestoreRepository {
                 .putString(PREF_LAST_LON, String.valueOf(location.getLongitude()))
                 .putFloat(PREF_LAST_ACC, location.getAccuracy())
                 .apply();
+    }
+
+    private boolean ensureAuthenticated(boolean allowBlocking) {
+        if (!firebaseReady || auth == null) {
+            return false;
+        }
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            return true;
+        }
+
+        if (!allowBlocking) {
+            auth.signInAnonymously().addOnFailureListener(
+                    exception -> Log.w(TAG, "Anonymous Firebase sign-in failed.", exception)
+            );
+            return false;
+        }
+
+        try {
+            Tasks.await(auth.signInAnonymously());
+            return auth.getCurrentUser() != null;
+        } catch (Exception exception) {
+            Log.w(TAG, "Blocking anonymous Firebase sign-in failed.", exception);
+            return false;
+        }
+    }
+
+    private boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

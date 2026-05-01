@@ -101,6 +101,7 @@ public class MainActivity extends Activity {
         stopSosButton = findViewById(R.id.stopSosButton);
 
         PermissionHelper.requestMissingRuntimePermissions(this);
+        new FirestoreRepository(this).primeAnonymousAuth();
         startMonitoringService();
         HealthSyncWorker.schedulePeriodic(this);
         renderFirebaseHintIfNeeded();
